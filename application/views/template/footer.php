@@ -1,5 +1,6 @@
 		<div id="footer" align="center" style="z-index: 999;">
 			<p>Powered by MDSLab <br />Visit: <a href="http://smartme.unime.it/it/">SmartME</a> and <a href="http://stack4things.unime.it/">Stack4Things</a></p>
+                        <!--<img src="<?= $this -> config -> site_url() .'uploads/smartme.png'  ?>" height="90" width="170" />-->
 		<p>An absolute URL</p>
                 </div>
 
