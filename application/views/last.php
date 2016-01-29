@@ -23,11 +23,8 @@
 		<? endif ?>
 	<? array_push($yunlist_all, $board["board_code"]) ?>
 	<? endforeach ?>
--->
-<!--	<?= print_r($yunlist_c) ?> -->
-<!--	<?= print_r($yunlist_d) ?> -->
 <? endif ?>
-
+-->
 
 
 
@@ -240,7 +237,8 @@ $json_sensors ='{
 -->
                                 </td>
                         </tr>
-			<tr><td><center><button class="button tiny radius" data-reveal-id="modal-register-new-board" onclick="refresh_lists();">Register Board</button></center></td></tr>
+			<tr><td><center><button class="button tiny radius" data-reveal-id="modal-register-new-board" onclick="sensor_list();  refresh_lists();">Register Board</button></center></td></tr>
+			<tr><td><center><button class="button tiny radius" data-reveal-id="modal-update-board" onclick="update_boards('update_yunlist'); refresh_lists();">Update Board</button></center></td></tr>
 			<tr><td><center><button class="button tiny radius" data-reveal-id="modal-unregister-board" onclick="refresh_lists();">Unregister Board</button></center></td></tr>
         	        </table>
 		</div>
@@ -254,7 +252,6 @@ $json_sensors ='{
 					<button class="button tiny radius" data-reveal-id="modal-led-management" onclick="update_boards('led_yunlist', 'C'); refresh_lists();">LED</button>
 					<button class="button tiny radius" data-reveal-id="modal-ssh-management" onclick="update_boards('ssh_yunlist', 'C'); refresh_lists();">SSH</button>
 					<button class="button tiny radius" data-reveal-id="modal-ckan" onclick="update_boards('ckan-yunlist'); refresh_lists();">CKAN</button>
-					<!-- <button class="button tiny radius" data-reveal-id="modal-register-new-board">Register Board</button> -->
                                 </td>
                         </tr>
                         <tr style="height:20%">
@@ -262,29 +259,13 @@ $json_sensors ='{
                                         <center><h3>Plugin Management</h3></center>
                                         <button class="button tiny radius" data-reveal-id="modal-create-plugin" onclick="refresh_lists();">Create Plugin</button>
                                         <button class="button tiny radius" data-reveal-id="modal-inject-plugin" onclick="update_boards('inject_yunlist', 'C'); refresh_lists();">Inject Plugin</button>
-<!--
-                                        <button class="button tiny radius" data-reveal-id="modal-run-plugin">Run Plugin</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-call-plugin">Call Plugin</button>
-					<button class="button tiny radius" data-reveal-id="modal-kill-plugin">Kill Plugin</button>
--->
 					<button class="button tiny radius" data-reveal-id="modal-startstop-plugin" onclick="update_boards('startstop_yunlist', 'C'); refresh_lists();">Start/Stop Plugin</button>
                                         <button class="button tiny radius" data-reveal-id="modal-call-plugin" onclick="update_boards('call_yunlist', 'C'); refresh_lists();">Call Plugin</button>
                                 </td>
                         </tr>
-<!--
-                        <tr style="height:20%">
-                                <td>
-                                        <h3>Extras</h3>
-                                        <button class="button tiny radius" onclick="window.open('http://smartme-data.unime.it/dataset/14141414')">CKAN</button>
-                                        <button class="button tiny radius" onclick="window.open('http://smartme.unime.it/it/')">SmartME</button>
-                                        <button class="button tiny radius" onclick="window.open('http://stack4things.unime.it/')">Stack4Things</button>
-                                </td>
-                        </tr>
--->
                         <tr style="height:20%">
                                 <td>
                                         <center><h3>Network Management</h3></center>
-                                        <!-- <button class="button tiny radius" id="show-net">Show Networks</button> -->
 					<button class="button tiny radius" data-reveal-id="modal-show-networks" onclick="refresh_lists();">Show Networks</button>
                                         <button class="button tiny radius" data-reveal-id="modal-create-net" onclick="refresh_lists();">Create Network</button>
                                         <button class="button tiny radius" data-reveal-id="modal-destroy-net" onclick="update_nets('destroy_network_uuid'); refresh_lists();">Destroy Network</button>
@@ -299,7 +280,6 @@ $json_sensors ='{
                 <div id="mapdiv" style="height: 650px; width: 550px; float:right;" ></div>
         </td>
 </table>
-
 
 <!-- STOP web page layout -->
 
@@ -387,17 +367,7 @@ $json_sensors ='{
                         <div class="row">
                                 <label>Board List</label>
 					<select id="ssh_yunlist" multiple="multiple" size="<?=$selectbox_size?>"></select>
-<!--
-                                        <? if (sizeof($yunlist_c) > 0): ?>
-                                                <select id="ssh_yunlist" multiple="multiple" size="<?=$selectbox_size?>">
-                                                        <? foreach ($yunlist_c as $board): ?>
-                                                                <option value="<?=$board ?>"> <?=$board?> </option>
-                                                        <? endforeach ?>
-                                                </select>
-                                        <? else: ?>
-                                                NO boards connected
-                                        <? endif ?>
--->
+
                                 <label>SSH Status</label>
                                 <select id="ssh-action">
                                         <option value="start">Start</option>
@@ -427,17 +397,7 @@ $json_sensors ='{
                <h3>CKAN Redirect</h3>
                <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 			<select id="ckan-yunlist" multiple="multiple" size="<?=$selectbox_size?>"></select>
-<!--
-                        <? if (sizeof($yunlist_all) > 0): ?>
-                                <select id="ckan-yunlist" multiple="multiple" size="<?=$selectbox_size?>">
-                                        <? foreach ($yunlist_all as $board): ?>
-                                                <option value="<?=$board ?>"> <?=$board?> </option>
-                                        <? endforeach ?>
-                                </select>
-                        <? else: ?>
-                                NO boards connected
-                        <? endif ?>
--->
+
                    <div class="row">
                     <div class="large-12 columns">
                         <button id="ckan_button" class="button tiny radius" style="font-size:1.0rem; color:#fff; float:right;">
@@ -466,6 +426,18 @@ $json_sensors ='{
 
                                 <label>Altitude (example: 150.12345678)</label>
                                         <input id="registration_altitude" type="text" placeholder="Altitude" value="" />
+
+				<label>Net enabled</label>
+					<select id="registration_net_enabled">
+						<option value="1">True</option>
+						<option value="0">False</option>
+					</select>
+
+				<label>Sensors On Board</label>
+					<fieldset>
+						<center><div id="registration_sensor_list"></div></center>
+					</fieldset>
+
                         </div>
                    </fieldset>
                    <div class="row">
@@ -481,6 +453,56 @@ $json_sensors ='{
                 <p id="board-registration-output" />
         </fieldset>
 </div>
+
+
+<div id="modal-update-board" class="reveal-modal small" data-reveal>
+        <section>
+                <h3>Modify Board</h3>
+                <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+                   <fieldset>
+                        <legend>Update</legend>
+                        <div class="row">
+                                <label>Board Code</label>
+					<select id="update_yunlist">
+						<option value="--">--</option>
+					</select>
+
+                                <label>Latitude (example: 38.12345678)</label>
+                                        <input id="update_latitude" type="text" placeholder="Latitude" value="" />
+
+                                <label>Longitude (example: 15.12345678)</label>
+                                        <input id="update_longitude" type="text" placeholder="Longitude" value="" />
+
+                                <label>Altitude (example: 150.12345678)</label>
+                                        <input id="update_altitude" type="text" placeholder="Altitude" value="" />
+
+                                <label>Net enabled</label>
+                                        <select id="update_net_enabled">
+                                                <option value="1">True</option>
+                                                <option value="0">False</option>
+                                        </select>
+
+                                <label>Sensors On Board</label>
+                                        <fieldset>
+                                                <center><div id="update_sensor_list"></div></center>
+                                        </fieldset>
+
+                        </div>
+                   </fieldset>
+                   <div class="row">
+                    <div class="large-12 columns">
+                        <button id="update-board" class="button tiny radius" style="font-size:1.0rem; color:#fff; float:right;">
+                            Update
+                        </button>
+                    </div>
+                   </div>
+        </section>
+        <fieldset>
+                <legend>Output</legend>
+                <p id="board-update-output" />
+        </fieldset>
+</div>
+
 
 <div id="modal-unregister-board" class="reveal-modal small" data-reveal>
         <section>
@@ -651,42 +673,6 @@ $json_sensors ='{
 
 
 
-
-<!--
-<div id="modal-run-plugin" class="reveal-modal small" data-reveal>
-        <section>
-                <h3>Run Plugin</h3>
-		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-                   <fieldset>
-                        <legend>Plugin Management</legend>
-                        <div class="row">
-                                <label>Plugin Name
-                                        <input id="run_plugin_name" type="text" placeholder="Plugin Name" name="name" value="" />
-                                </label>
-                                <label>Board List
-                                <select id="run_yunlist">
-                                        <? foreach ($yunlist["list"] as $board): ?>
-						<? if ($board["status"] == "C"): ?>
-	                                                <option value="<?=$board["board_code"]?>"> <?=$board["board_code"]?> </option>
-						<? endif ?>
-                                        <? endforeach ?>
-                                </select>
-                                </label>
-                                <label>Plugin Json
-                                        <textarea id="run_plugin_json" placeholder="Insert here the json" name="text" rows="10"></textarea>
-                                </label>
-                        </div>
-                   </fieldset>
-                   <div class="row">
-                    <div class="large-12 columns">
-                        <button id="run_plugin" class="close-reveal-modal tiny radius" style="font-size:1.0rem; color:#fff" >
-                            Send
-                        </button>
-                    </div>
-                   </div>
-        </section>
-</div>
--->
 <div id="modal-call-plugin" class="reveal-modal small" data-reveal>
 	<section>
 		<h3>Call Plugin</h3>
@@ -729,39 +715,6 @@ $json_sensors ='{
                 <p id="call-plugin-output" />
         </fieldset>
 </div>
-
-<!--
-<div id="modal-kill-plugin" class="reveal-modal small" data-reveal>
-        <section>
-                <h3>Kill Plugin</h3>
-		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-                   <fieldset>
-                        <legend>Plugin Management</legend>
-                        <div class="row">
-                                <label>Plugin Name
-                                        <input id="kill_plugin_name" type="text" placeholder="Plugin Name" name="name" value="" />
-                                </label>
-                                <label>Board List
-                                <select id="kill_yunlist" multiple="multiple" size="5">
-                                        <? foreach ($yunlist["list"] as $board): ?>
-						<? if ($board["status"] == "C"): ?>
-	                                                <option value="<?=$board["board_code"]?>"> <?=$board["board_code"]?> </option>
-						<? endif ?>
-                                        <? endforeach ?>
-                                </select>
-                                </label>
-                        </div>
-                   </fieldset>
-                   <div class="row">
-                    <div class="large-12 columns">
-                        <button id="kill_plugin" class="close-reveal-modal tiny radius" style="font-size:1.0rem; color:#fff" >
-                            Send
-                        </button>
-                    </div>
-                   </div>
-        </section>
-</div>
--->
 
 
 <div id="modal-show-networks" class="reveal-modal small" data-reveal>
@@ -982,6 +935,80 @@ $json_sensors ='{
 <script>
 	var delay = 5000;
 
+
+	function sensor_list(){
+		$('#registration_sensor_list').empty();
+		$.ajax({
+			url: '<?= $this -> config -> site_url()?>Last/sensor_list',
+			type: 'GET',
+			dataType: 'json',
+			data: {},
+			contentType: 'application/json',
+			success: function(response){
+				for(i=0; i<response.message.length; i++){
+					$('#registration_sensor_list').append('<input class="register_sensor_list" type="checkbox" id="'+response.message[i].id+'">'+response.message[i].type+'</input><br>');
+			//		if( i%2 != 0) $('#registration_sensor_list').append('<br>');
+
+				}
+				//alert(response.message.length+JSON.stringify(response.message,null,"\t"));
+			},
+			error: function(response){
+				//alert('ERROR: '+JSON.stringify(response));
+			}
+		});
+	}
+
+
+        function populate_plugins_and_sensors(data){
+                $('#plugins_on_board').empty();
+                $('#sensors_on_board').empty();
+
+                var select = document.getElementById(data);
+                if(data == "yunlist_c")
+                        $('#yunlist_d option').removeAttr('selected');
+                else
+                        $('#yunlist_c option').removeAttr('selected');
+                //alert(select.options[select.selectedIndex].value);
+
+                if (select.selectedIndex != null){
+			
+			$.ajax({
+				url: '<?= $this -> config -> site_url()?>Last/board_layout',
+				type: 'GET',
+				dataType: 'json',
+				data: {board: select.options[select.selectedIndex].value},
+				contentType: 'application/json',
+				success: function(response){
+
+
+					//Plugins		
+					if(response.message.plugins.length == 0)
+						$('#plugins_on_board').append('<option>NO plugin injected or running</option>');
+					else{
+						for(i=0; i<response.message.plugins.length; i++)
+							$('#plugins_on_board').append('<option>'+response.message.plugins[i].name+' [STATUS: '+response.message.plugins[i].state+']</option>');
+					}
+
+					//Sensors
+                                        if(response.message.sensors.length == 0)
+                                                $('#sensors_on_board').append('<option>NO sensors installed</option>');
+                                        else{
+                                                for(i=0; i<response.message.sensors.length; i++)
+                                                        $('#sensors_on_board').append('<option>'+response.message.sensors[i].type+'</option>');
+                                        }
+
+				},
+				error: function(response){
+					//alert('ERROR: '+JSON.stringify(response));
+				}
+			});
+                }
+        }
+
+
+
+
+/*
 	function populate_plugins(data){
 	        $('#plugins_on_board').empty();
 	        $('#sensors_on_board').empty();
@@ -1021,7 +1048,7 @@ $json_sensors ='{
 		        }
 	        }
 	}
-
+*/
 
 	function update_boards(select_id, status){
 		$.ajax({
@@ -1031,7 +1058,17 @@ $json_sensors ='{
 			data: {},
 			contentType: 'application/json',
 			success: function(response){
+
 				$('#'+select_id).empty();
+				if(select_id == 'update_yunlist'){
+					$('#'+select_id).append('<option title="--" value="--" data-unit="">--</option>');
+	                                document.getElementById("update_latitude").value = '';
+	                                document.getElementById("update_longitude").value = '';
+        	                        document.getElementById("update_altitude").value = '';
+                	                $('#update_sensor_list').empty();
+                        	        document.getElementById("board-update-output").innerHTML ='';
+				}
+
 				for(var i=0; i<response.list.length; i++){
 					if(status == "C"){
 						if(response.list[i].status == "C")
@@ -1052,9 +1089,96 @@ $json_sensors ='{
 	}
 
 
+        $('[id="update_yunlist"]').on('change',
+                function() {
+
+			var board_id = $( "#update_yunlist option:selected" ).val();
+
+			if(board_id == '--'){
+				document.getElementById("update_latitude").value = '';
+				document.getElementById("update_longitude").value = '';
+        	                document.getElementById("update_altitude").value = '';
+				$('#update_sensor_list').empty();
+                        	document.getElementById("board-update-output").innerHTML ='';
+			}
+			else{
+			
+			$('#update_sensor_list').empty();
+			$.ajax({
+				url: '<?= $this -> config -> site_url()?>Last/sensor_list',
+				type: 'GET',
+				dataType: 'json',
+				data: {},
+				contentType: 'application/json',
+				success: function(response){
+					for(i=0; i<response.message.length; i++){
+						$('#update_sensor_list').append('<input class="update_sensor_list" type="checkbox" id="'+response.message[i].id+'">'+response.message[i].type+'</input><br>');
+					}
+
+					$.ajax({
+						url: '<?= $this -> config -> site_url()?>Last/board_info',
+						type: 'GET',
+						dataType: 'json',
+						data: {board: board_id},
+						contentType: 'application/json',
+						success: function(response){
+
+							document.getElementById("update_latitude").value = response.message.info[0].latitude;
+							document.getElementById("update_longitude").value = response.message.info[0].longitude;
+							document.getElementById("update_altitude").value = response.message.info[0].altitude;
+							document.getElementById("update_net_enabled").value = response.message.info[0].net_enabled;
+
+							var list = document.getElementsByClassName("update_sensor_list");
+
+							for(i=0; i<list.length; i++){
+								for(j=0; j<response.message.sensors.length; j++){
+									if(list[i].id == response.message.sensors[j].id){
+										document.getElementById(list[i].id).checked = true;
+										break;
+									}
+								}
+							}
+						},
+						error: function(response){
+							//alert('ERROR: '+JSON.stringify(response));
+						}
+					});
+				},
+                		error: function(response){
+		                	//alert('ERROR: '+JSON.stringify(response));
+		               	}
+			});
+			}
+		}
+	);
+
+
 	function refresh_lists(){
-		update_boards('yunlist_c', 'C');
-		update_boards('yunlist_d', 'D');
+		//update_boards('yunlist_c', 'C');
+		//update_boards('yunlist_d', 'D');
+
+		$.ajax({
+			url: '<?= $this -> config -> site_url()?>Last/update_boards',
+			type: 'GET',
+			dataType: 'json',
+			data: {},
+			contentType: 'application/json',
+			success: function(response){
+				//$('#'+select_id).empty();
+				$('#yunlist_c').empty();
+				$('#yunlist_d').empty();
+				for(var i=0; i<response.list.length; i++){
+					if(response.list[i].status == "C")
+						$('#yunlist_c').append('<option title="'+response.list[i].board_code+'" value="'+response.list[i].board_code+'" data-unit="">'+response.list[i].board_code+'</option>');
+					else if(response.list[i].status == "D")
+						$('#yunlist_d').append('<option title="'+response.list[i].board_code+'" value="'+response.list[i].board_code+'" data-unit="">'+response.list[i].board_code+'</option>');
+				}
+			},
+			error: function(response){
+				//alert('ERROR: '+JSON.stringify(response));
+			}
+		});
+
 	}
 
 
@@ -1081,7 +1205,7 @@ $json_sensors ='{
 
 	$('[data-reveal-id="modal-plugins_sensors-lists"]').on('click',
 	        function() {
-	                populate_plugins($(this).data('yunlistSelected'));
+	                populate_plugins_and_sensors($(this).data('yunlistSelected'));
 	        }
 	);
 
@@ -1206,10 +1330,30 @@ $json_sensors ='{
 
 
 	$('#register-board').click(function(){
+
+		var list = document.getElementsByClassName("register_sensor_list");
+		var sensors ="";
+		var count = 0;
+
+		for(i=0; i<list.length; i++){
+			if (list[i].checked){
+				if(count==0){
+					sensors = list[i].id;
+					count += 1;
+				}
+				else
+					sensors += ","+list[i].id;
+			}
+		}
+
+
 		var board_id = document.getElementById("registration_name").value;
 		var latitude = document.getElementById("registration_latitude").value;
 		var longitude = document.getElementById("registration_longitude").value;
 		var altitude = document.getElementById("registration_altitude").value;
+
+		var net_enabled = document.getElementById("registration_net_enabled").value;
+
 
 		document.getElementById("board-registration-output").innerHTML ='';
 
@@ -1217,10 +1361,12 @@ $json_sensors ='{
                         url: '<?= $this -> config -> site_url()?>Last/register_board',
                         type: 'GET',
                         dataType: 'json',
-                        data: {board_id: board_id, latitude: latitude, longitude: longitude, altitude: altitude},
+                        //data: {board_id: board_id, latitude: latitude, longitude: longitude, altitude: altitude},
+			data: {board_id: board_id, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensors_list: sensors},
                         contentType: 'application/json',
                         success: function(response){
                                 document.getElementById("board-registration-output").innerHTML = '<pre>'+board_id+': '+JSON.stringify(response.result) +'</pre>';
+				refresh_lists();
                         },
                         error: function(response){
                                 //alert(JSON.stringify(response));
@@ -1228,6 +1374,63 @@ $json_sensors ='{
                         }
                 });
 	});
+
+
+        $('#update-board').click(function(){
+                var list = document.getElementsByClassName("update_sensor_list");
+                var sensors ="";
+		var count = 0;
+
+                for(i=0; i<list.length; i++){
+                        if (list[i].checked){
+                                if(count==0){
+                                        sensors = list[i].id;
+					count += 1;
+				}
+                                else
+                                        sensors += ","+list[i].id;
+                        }
+                }
+
+
+		var board_id = document.getElementById("update_yunlist").value;
+
+		if(board_id == '--'){
+/*
+			$("#update_latitude").empty();
+			$("#update_longitude").empty();
+			$("#update_altitude").empty();
+			document.getElementById("board-update-output").innerHTML ='';
+*/
+			alert('Select a Board');
+		}
+		else{
+
+	                var latitude = document.getElementById("update_latitude").value;
+        	        var longitude = document.getElementById("update_longitude").value;
+                	var altitude = document.getElementById("update_altitude").value;
+
+	                var net_enabled = document.getElementById("update_net_enabled").value;
+
+        	        document.getElementById("board-update-output").innerHTML ='';
+
+                	$.ajax({
+	                        url: '<?= $this -> config -> site_url()?>Last/update_board',
+        	                type: 'GET',
+                	        dataType: 'json',
+                        	data: {board_id: board_id, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensors_list: sensors},
+	                        contentType: 'application/json',
+        	                success: function(response){
+                	                document.getElementById("board-update-output").innerHTML = '<pre>'+board_id+': '+JSON.stringify(response.result) +'</pre>';
+					refresh_lists();
+	                        },
+        	                error: function(response){
+                	                //alert(JSON.stringify(response));
+	                                document.getElementById("board-update-output").innerHTML = '<pre>'+board_id+': '+JSON.stringify(response.result) +'</pre>';
+        	                }
+	                });
+		}
+        });
 
 
         $('#unregister-board').click(function(){
@@ -1512,121 +1715,6 @@ $json_sensors ='{
                         }
                 }
         });
-
-
-
-/*
-	$('#run_plugin').click(function(){
-
-		if ($('#run_yunlist option:selected').length == 0) { alert('Select a Board'); }
-		else {
-
-			var plugin_name = document.getElementById("run_plugin_name").value;
-			var plugin_json = document.getElementById("run_plugin_json").value;
-
-			var board_id =$('#run_yunlist').val();
-
-			$.ajax({
-				url: '<?= $this -> config -> site_url()?>Last/run_plugin',
-				type: 'GET',
-				dataType: 'json',
-				data: {plugin_name : plugin_name, board: board_id, plugin_json: plugin_json},
-				contentType: 'application/json',
-				success: function(response){
-					//alert(JSON.stringify(response));
-					//document.getElementById("output").innerHTML = JSON.stringify(response);
-					document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-				},
-				error: function(response){
-					alert(JSON.stringify(response));
-					//document.getElementById("output").innerHTML = response.responseText;
-					document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-				}
-			});
-		}
-	});
-
-
-	$('#call_plugin').click(function(){
-
-		if ($('#call_yunlist option:selected').length == 0) { alert('Select a Board'); }
-		else {
-
-			var plugin_name = document.getElementById("call_plugin_name").value;
-			var plugin_json = document.getElementById("call_plugin_json").value;
-
-			var board_id =$('#call_yunlist').val();
-
-			$.ajax({
-				url: '<?= $this -> config -> site_url()?>Last/call_plugin',
-				type: 'GET',
-				dataType: 'json',
-				data: {plugin_name : plugin_name, board: board_id, plugin_json: plugin_json},
-				contentType: 'application/json',
-				success: function(response){
-					//alert(JSON.stringify(response));
-					//document.getElementById("output").innerHTML = JSON.stringify(response);
-					document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-				},
-				error: function(response){
-					alert(JSON.stringify(response));
-					//document.getElementById("output").innerHTML = JSON.stringify(response);
-					document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-				}
-			});
-		}
-	});
-
-
-
-	$('#kill_plugin').click(function(){
-
-		if ($('#kill_yunlist option:selected').length == 0) { alert('Select a Board'); }
-		else {
-
-			var list = document.getElementById("kill_yunlist");
-			var selected_list = [];
-
-			var plugin_name = document.getElementById("kill_plugin_name").value;
-			var board_id =$('#kill_yunlist').val();
-
-			for(var i=0; i< list.length; i++){
-				if (list.options[i].selected)
-					selected_list.push(list[i].value);
-			}
-
-			for(var i=0; i< selected_list.length; i++){
-				var board_id = selected_list[i];
-
-				//---------------------------------------------------------------------------------             
-				(function(i){
-					setTimeout(function(){
-				//---------------------------------------------------------------------------------
-						$.ajax({
-							url: '<?= $this -> config -> site_url()?>Last/kill_plugin',
-							type: 'GET',
-							dataType: 'json',
-							data: {plugin_name : plugin_name, board: board_id},
-							contentType: 'application/json',
-							success: function(response){
-								//alert(JSON.stringify(response));
-								//document.getElementById("output").innerHTML = JSON.stringify(response);
-								document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-							},
-							error: function(response){
-								alert(JSON.stringify(response));
-								//document.getElementById("output").innerHTML = response.responseText;
-								document.getElementById("output").innerHTML = '<pre>'+board_id +': <br />'+JSON.stringify(response) +'</pre>';
-							}
-						});
-				//---------------------------------------------------------------------------------
-					},delay*i);
-				})(i);
-				//---------------------------------------------------------------------------------
-			}
-		}
-	});
-*/
 
 
         $('[data-reveal-id="modal-show-networks"]').on('click',
