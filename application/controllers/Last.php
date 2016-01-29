@@ -24,6 +24,30 @@ class Last extends CI_Controller {
 	}
 
 
+	public function sensor_list(){
+		$this -> load -> library('curl');
+		$result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/sensorlist');
+		echo $result;
+	}
+
+
+	public function board_layout(){
+                $this -> load -> library('curl');
+
+		$board_id = $this -> input -> get('board');
+                $result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=board-layout&board='.$board_id);
+                echo $result;
+        }
+
+
+        public function board_info(){
+                $this -> load -> library('curl');
+
+                $board_id = $this -> input -> get('board');
+                $result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=board-info&board='.$board_id);
+                echo $result;
+        }
+
 	public function update_boards(){
 		$this -> load -> library('curl');
 		$result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/list');
@@ -71,10 +95,32 @@ class Last extends CI_Controller {
 		$longitude = $this -> input -> get('longitude');
 		$altitude = $this -> input -> get('altitude');
 
-                $result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=reg-board&board='.$board_id.'&latitude='.$latitude.'&longitude='.$longitude.'&altitude='.$altitude);
+		$net_enabled = $this -> input -> get('net_enabled');
+		$sensors_list = $this -> input -> get('sensors_list');
+
+                //$result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=reg-board&board='.$board_id.'&latitude='.$latitude.'&longitude='.$longitude.'&altitude='.$altitude);
+		$result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=reg-board&board='.$board_id.'&latitude='.$latitude.'&longitude='.$longitude.'&altitude='.$altitude.'&net_enabled='.$net_enabled.'&sensorlist='.$sensors_list);
 
                 echo $result;
         }
+
+
+        public function update_board(){
+                $this -> load -> library('curl');
+
+                $board_id = $this -> input -> get('board_id');
+                $latitude = $this -> input -> get('latitude');
+                $longitude = $this -> input -> get('longitude');
+                $altitude = $this -> input -> get('altitude');
+
+                $net_enabled = $this -> input -> get('net_enabled');
+                $sensors_list = $this -> input -> get('sensors_list');
+
+                $result = $this -> curl -> simple_get('http://<SERVER_IP>:<PORT>/command/?command=update-board&board='.$board_id.'&latitude='.$latitude.'&longitude='.$longitude.'&altitude='.$altitude.'&net_enabled='.$net_enabled.'&sensorlist='.$sensors_list);
+
+                echo $result;
+        }
+
 
         public function unregister_board(){
                 $this -> load -> library('curl');
@@ -204,6 +250,7 @@ class Last extends CI_Controller {
                 echo $result;
         }
 
+        //INSERIRE L'UPDATE NETWORK!!!!!
 
         public function remove_from_network(){
                 $this -> load -> library('curl');
