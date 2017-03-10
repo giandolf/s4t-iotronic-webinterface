@@ -41,6 +41,7 @@ Download the CodeIgniter-3.1.2 from https://github.com/bcit-ci/CodeIgniter/archi
 $config['index_page'] = 'index.php'; → $config['index_page'] = '';
 $config['encryption_key'] = ''; → $config['encryption_key'] = 'your_encryption_key';  (if needed)
 ADD → $config['s4t_api_url'] = 'http://<SERVER_IP>:8888';
+```
 
 # CodeIgniter extra packages
 After having changed some global and common configuration parameters it is possible to download the CodeIgniter Curl library (not present by default) into the ```application/libraries``` folder.
