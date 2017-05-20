@@ -1807,10 +1807,10 @@
 						var board_name = selected_names[i];
 
 						$.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/gpio/digital/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/gpio/digital/write",
 							type: 'POST',
 							dataType: 'json',
-							data: {op: 'write', pin: pin, value: led_action},
+							data: {pin: pin, value: led_action},
 
 							success: function(response){
 								if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
@@ -1860,7 +1860,7 @@
 						var board_name = selected_names[i];
 
                                                 $.ajax({
-                                                        url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/services/"+board_id,
+                                                        url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/services/action",
                                                         type: 'POST',
                                                         dataType: 'json',
 							data: {command: "ssh", op: ssh_action},
@@ -1938,7 +1938,7 @@
 		if(sensors=="") sensors = "empty";
 
 
-		var node = document.getElementById("registration_name").value;
+		var board = document.getElementById("registration_name").value;
 		var label = document.getElementById("registration_label").value;
 		var latitude = document.getElementById("registration_latitude").value;
 		var longitude = document.getElementById("registration_longitude").value;
@@ -1951,10 +1951,10 @@
 		document.getElementById("board-registration-output").innerHTML ='';
 
 		$.ajax({
-			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/nodes/",
+			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/",
 			type: 'POST',
 			dataType: 'json',
-			data: {node: node, node_label: label, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensorslist: sensors, extra: {"ckan_enabled": ckan_enabled}},
+			data: {board: board, board_label: label, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensorslist: sensors, extra: {"ckan_enabled": ckan_enabled}},
 
 			success: function(response){
 				document.getElementById('loading_bar').style.visibility='hidden';
@@ -2011,10 +2011,10 @@
         	        document.getElementById("board-update-output").innerHTML ='';
 
                 	$.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/nodes/"+board_id,
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id,
 				type: 'PATCH',
 				dataType: 'json',
-				data: {node_label: label, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensorslist: sensors},
+				data: {board_label: label, latitude: latitude, longitude: longitude, altitude: altitude, net_enabled: net_enabled, sensorslist: sensors},
 
         	                success: function(response){
 					document.getElementById('loading_bar').style.visibility='hidden';
@@ -2059,7 +2059,7 @@
 
 						//$.support.cors = true;
 						$.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/nodes/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id,
 							type: "DELETE",
 
 							success: function(response){ 
@@ -2202,10 +2202,10 @@
                                                 var board_id = selected_list[i];
 						var board_name = selected_names[i];
                                                 $.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/drivers",
 							type: "PUT",
 							dataType: 'json',
-							data: {drivername : driver_name, autostart: inject_autostart},
+							data: {driver: driver_name, onboot: inject_autostart},
 
 
                                                         success: function(response){
@@ -2260,16 +2260,15 @@
 
 			var data = {};
 			if(flag=="true")
-				data = {drivername: driver_name, remote_driver: flag, driveroperation: "mount", mirror_node: remote_board};
+				data = {remote_driver: flag, driveroperation: "mount", mirror_board: remote_board};
 			else
-				data = {drivername: driver_name, remote_driver: flag, driveroperation: "mount"};
+				data = {remote_driver: flag, driveroperation: "mount"};
 
 
                         $.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+local_board,
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+local_board+"/drivers/"+driver_name+"/action",
 				type: 'POST',
 				dataType: 'json',
-				//data: {drivername: driver_name, remote_driver: flag, driveroperation: "mount", mirror_node: remote_board},
 				data: data,
 
                                 success: function(response){
@@ -2306,10 +2305,10 @@
 
 
                         $.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+board_id,
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/drivers/"+driver_name+"/action",
 				type: 'POST',
 				dataType: 'json',
-				data: {drivername: driver_name, driveroperation: "unmount"},
+				data: {driveroperation: "unmount"},
 
                                 success: function(response){
                                         document.getElementById('loading_bar').style.visibility='hidden';
@@ -2351,7 +2350,7 @@
 		}
                 else {
                         $.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+board_id+"/write",
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/drivers/write",
 				type: 'POST',
 				dataType: 'json',
 				data: {drivername: driver_name, driver_exp_filename: filename, filecontent: file_content},
@@ -2395,7 +2394,7 @@
 		}
                 else {
                         $.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+board_id+"/read",
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/drivers/read",
 				type: 'POST',
 				dataType: 'json',
 				data: {drivername: driver_name, driver_exp_filename: filename},
@@ -2440,7 +2439,7 @@
 	                        //---------------------------------------------------------------------------------
         	                                var driver_name = selected_list[i];
                 	                        $.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/drivers/"+driver_name+"/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/drivers/"+driver_name,
 							type: "DELETE",
 
 	                                                success: function(response){
@@ -2565,7 +2564,6 @@
 			var output_string = '';
 
 			document.getElementById("inject-plugin-output").innerHTML ='';
-			//var plugin_name = document.getElementById("inject_plugin_name").value;
 			var plugin_name = document.getElementById("inject_pluginlist").value;
 			var inject_autostart = document.getElementById("inject_autostart").value;
 
@@ -2585,7 +2583,7 @@
 						var board_id = selected_list[i];
 						var board_name = selected_names[i];
 						$.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/plugins/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/plugins",
 							type: 'PUT',
 							dataType: 'json',
 							data: {pluginname : plugin_name, autostart: inject_autostart},
@@ -2644,10 +2642,10 @@
 						var board_name = selected_names[i];
                 		                if(start_stop_flag == "start"){
                  	                               $.ajax({
-								url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/plugins/"+board_id,
+								url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/plugins/"+plugin_name,
 								type: 'POST',
 								dataType: 'json',
-								data: {pluginname: plugin_name, pluginjson: plugin_json, pluginoperation: "run"},
+								data: {pluginjson: plugin_json, pluginoperation: "run"},
 
                                                         	success: function(response){
 									if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
@@ -2661,10 +2659,10 @@
 		                                }
                 		                else if(start_stop_flag == "stop"){
                                                 	$.ajax({
-								url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/plugins/"+board_id,
+								url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/plugins/"+plugin_name,
 								type: 'POST',
 								dataType: 'json',
-								data: {pluginname: plugin_name, pluginjson: plugin_json, pluginoperation: "kill"},
+								data: {pluginoperation: "kill"},
 
                         	                                success: function(response){
 									if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
@@ -2717,10 +2715,10 @@
 						var board_name = selected_names[i];
 
                                                 $.ajax({
-							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/plugins/"+board_id,
+							url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/plugins/"+plugin_name,
 							type: 'POST',
 							dataType: 'json',
-							data: {pluginname : plugin_name, pluginoperation: "call", pluginjson: plugin_json},
+							data: {pluginoperation: "call", pluginjson: plugin_json},
 
                                                         success: function(response){
 								if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
@@ -2762,7 +2760,7 @@
 			//---------------------------------------------------------------------------------
 					var plugin_name = selected_list[i];
 			                $.ajax({
-						url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/plugins/"+plugin_name+"/"+board_id,
+						url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/plugins/"+plugin_name,
 						type: "DELETE",
 
                         			success: function(response){
@@ -2783,7 +2781,7 @@
 			function(){
 				$('#remove_pluginlist').empty();
 				$.ajax({
-					url: '<?= $this -> config -> item('s4t_api_url') ?>/v1/nodes/'+board_id,
+					url: '<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/'+board_id,
 					type: 'GET',
 
 					success: function(response){
@@ -2833,7 +2831,7 @@
 
                 $.ajax({
 			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/",
-			type: 'PUT',
+			type: 'POST',
 			dataType: 'json',
 			data: {netname: create_network_name, value: create_network_ip},
 
@@ -2885,8 +2883,8 @@
                 var addboard_network_ip = document.getElementById("addboard_network_ip").value;
 
                 $.ajax({
-			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+addboard_network_uuid+"/"+board_id,
-			type: 'POST',
+			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/vnets/"+addboard_network_uuid,
+			type: 'PUT',
 			data: {value: addboard_network_ip},
 
                         success: function(response){
@@ -2936,7 +2934,7 @@
 		board_id = document.getElementById("removeboard_yunlist").value;
 
 		$.ajax({
-			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+removeboard_network_uuid+"/"+board_id,
+			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/vnets/"+removeboard_network_uuid,
 			type: "DELETE",
 
 			success: function(response){
@@ -2950,7 +2948,7 @@
 		}).then(
                         function(){
                                 $.ajax({
-                                        url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+addboard_network_uuid,
+                                        url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+removeboard_network_uuid,
                                         type: 'GET',
 
                                         success: function(response){
@@ -3000,7 +2998,7 @@
 		//document.getElementById('loading_bar').style.visibility='visible';
                 var activate_boardnet_uuid = document.getElementById("activate_boardnet_yunlist").value;
                 $.ajax({
-			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+activate_boardnet_uuid,
+			url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vnets/"+activate_boardnet_uuid+"/force",
 			type: "PUT",
 
                         success: function(response){
@@ -3029,10 +3027,10 @@
 		else{
 
 			$.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vfs/"+mount_in_board+"/mount",
+				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+mount_in_board+"/vfs/mount",
 				type: 'POST',
 				//dataType: 'json',
-				data: {node_src: mount_from_board, path_src: path_from, path_dst: path_in},
+				data: {board_src: mount_from_board, path_src: path_from, path_dst: path_in},
 
 				success: function(response){
 					document.getElementById('loading_bar').style.visibility='hidden';
@@ -3047,32 +3045,77 @@
 	});
 
 
-	$('#unmount_vfs').click(function(){
-		var board = document.getElementById("unmount_vfs_yunlist").value;
-		var path = document.getElementById("unmount_vfs_path").value;
+        $('#unmount_vfs').click(function(){
+                var value_list = document.getElementById("unmount_vfs_in_yunlist").value;
+                document.getElementById('loading_bar').style.visibility='hidden',
 
-		if (path == "") { alert('Write a correct path!'); document.getElementById('loading_bar').style.visibility='hidden'; }
+                var board_id = document.getElementById("unmount_vfs_in_yunlist").value;
+                var list = document.getElementById("unmount_vfs_dirlist");
+                var selected_list = [];
+                for(var i=0; i< list.length; i++){
+                        if (list.options[i].selected)
+                                selected_list.push(list[i].value);
+                }
 
-		else{
-			$.ajax({
-				url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/vfs/"+board+"/unmount",
-				type: 'POST',
-				//dataType: 'json',
-				data: {path_dst: path},
+                document.getElementById("vfs-unmount-output").innerHTML ='';
 
-				success: function(response){
-					//alert(JSON.stringify(response));
-					document.getElementById('loading_bar').style.visibility='hidden';
-					document.getElementById("vfs-unmount-output").innerHTML = response.message;
-				},
-				error: function(response){
-					//alert(JSON.stringify(response));
-					document.getElementById('loading_bar').style.visibility='hidden';
-					document.getElementById("vfs-unmount-output").innerHTML = response.message;
-				}
-			});
-		}
-	});
+                for(var i=0; i< selected_list.length; i++){
+                        //---------------------------------------------------------------------------------
+                        (function(i){
+                                setTimeout(function(){
+                        //---------------------------------------------------------------------------------
+                                var plugin_name = selected_list[i];
+                                $.ajax({
+                                        url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+board_id+"/vfs/unmount",
+                                        type: "POST",
+                                        data: {board_src: mount_from_board, path_src: path_from, path_dst: path_in},
+
+                                        success: function(response){
+                                                if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
+                                                document.getElementById("remove-plugin-output").innerHTML += '<pre>'+JSON.stringify(response.message) +'</pre>';
+                                        },
+                                        error: function(response){
+                                                if(i==selected_list.length-1) document.getElementById('loading_bar').style.visibility='hidden';
+                                                document.getElementById("remove-plugin-output").innerHTML += '<pre>'+JSON.stringify(response.message) +'</pre>';
+                                        }
+                                });
+                        //---------------------------------------------------------------------------------
+                                },delay*i);
+                        })(i);
+                        //---------------------------------------------------------------------------------
+                }
+        });
+	
+        $('#forcemount_vfs').click(function(){
+                var mount_in_board = document.getElementById("forcemount_vfs_in_yunlist").value;
+                var path_in = document.getElementById("forcemount_vfs_in_path").value;
+
+                var mount_from_board = document.getElementById("forcemount_vfs_from_yunlist").value;
+                var path_from = document.getElementById("forcemount_vfs_from_path").value;
+
+                if (path_in == "" || path_from == "") { 
+                        alert('Write correct path(s)!'); 
+                        document.getElementById('loading_bar').style.visibility='hidden'; 
+                }
+                else{
+
+                        $.ajax({
+                                url: "<?= $this -> config -> item('s4t_api_url') ?>/v1/boards/"+mount_in_board+"/vfs/force-mount",
+                                type: 'POST',
+                                //dataType: 'json',
+                                data: {board_src: mount_from_board, path_src: path_from, path_dst: path_in},
+
+                                success: function(response){
+                                        document.getElementById('loading_bar').style.visibility='hidden';
+                                        document.getElementById("vfs-forcemount-output").innerHTML = response.message;
+                                },
+                                error: function(response){
+                                        document.getElementById('loading_bar').style.visibility='hidden';
+                                        document.getElementById("vfs-forcemount-output").innerHTML = response.message;
+                                }
+                        });
+                }
+        });
 	// #############################################################################################################################################
 
 
