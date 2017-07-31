@@ -10,86 +10,61 @@
 <!-- LOADING GIF -->
 <div id="loading_bar"></div>
 
-<table style="width:99%; margin: 0 auto">
-	<td valign="top">
-		<div style="width:320px;overflow: auto;">
-			<center><h2>Boards</h2></center>
-	                <table style="width:100%" border="0" >
-                        <tr style="height:50%">
-                                <td>
-					<center><div id="count-connected"></center>
-					<select id="yunlist_c" size="<?=$selectbox_size?>" style="width:290px; height:200px" data-yunlist-selected="yunlist_c" data-reveal-id="modal-plugins_sensors-lists"></select>
-                                </td>
-                        </tr>
-                        <tr style="height:50%">
-                                <td>
-					<center><div id="count-disconnected"></center>
-					<select id="yunlist_d" size="<?=$selectbox_size?>" style="width:290px; height:200px" data-yunlist-selected="yunlist_d" data-reveal-id="modal-plugins_sensors-lists"></select>
-                                </td>
-                        </tr>
-			<tr>
-				<td>
-					<center>
-						<button class="button tiny radius" data-reveal-id="modal-register-new-board" onclick="$('#board-registration-output').empty(); generate_uuid(); sensor_list(); refresh_lists();">Register</button>
-						<button class="button tiny radius" data-reveal-id="modal-update-board" onclick="$('#board-update-output').empty(); update_boards('update_yunlist'); refresh_lists();">Update</button>
-						<button class="button tiny radius" data-reveal-id="modal-unregister-board" onclick="$('#board-unregistration-output').empty(); update_boards('unregister_boardlist'); refresh_lists();">Unregister</button>
-					</center>
-				</td>
-			</tr>
-
-        	        </table>
-		</div>
-	</td>
-	<td valign="top">
-        	<table border="0" style="width:100%" >
-                        <tr style="height:20%">
-                                <center><h2>Commands</h2></center>
-				<td style='text-align: center'>
-                                        <center><h3>Board Management</h3></center>
-					<button class="button tiny radius" data-reveal-id="modal-led-management" onclick="$('#led-output').empty(); update_boards('led_yunlist', 'C'); refresh_lists();">LED</button>
-					<button class="button tiny radius" data-reveal-id="modal-ssh-management" onclick="$('#ssh-output').empty(); update_boards('ssh_yunlist', 'C'); refresh_lists();">SSH</button>
-                                </td>
-                        </tr>
-			<tr style="height:20%">
-				<td style='text-align: center'>
-					<center><h3>Driver Management</h3></center>
-					<button class="button tiny radius" data-reveal-id="modal-create-driver" onclick="$('#create-driver-output').empty(); refresh_lists();">Create</button>
-					<button class="button tiny radius" data-reveal-id="modal-destroy-driver" onclick="$('#destroy-driver-output').empty(); refresh_cloud_drivers('destroy_driverlist'); refresh_lists();">Remove from Cloud</button>
-					<button class="button tiny radius" data-reveal-id="modal-inject-driver" onclick="$('#inject-driver-output').empty(); refresh_cloud_drivers('inject_driverlist'); update_boards('inject_driver_yunlist', 'C'); refresh_lists();">Inject</button>
-					<button class="button tiny radius" data-reveal-id="modal-mount-driver" onclick="$('#mount-driver-output').empty(); update_boards('mount_yunlist', 'C'); $('#mount_div_remote').hide(); refresh_lists();">Mount</button>
-					<button class="button tiny radius" data-reveal-id="modal-unmount-driver" onclick="$('#unmount-driver-output').empty(); update_boards('unmount_yunlist', 'C'); refresh_lists();">Unmount</button>
-					<button class="button tiny radius" data-reveal-id="modal-write-driver" onclick="$('#write-driver-output').empty(); update_boards('write_driver_yunlist', 'C'); refresh_lists();">Write</button>
-					<button class="button tiny radius" data-reveal-id="modal-read-driver" onclick="$('#read-driver-output').empty(); update_boards('read_driver_yunlist', 'C'); refresh_lists();">Read</button>
-					<button class="button tiny radius" data-reveal-id="modal-remove-driver" onclick="$('#remove-driver-output').empty(); update_boards('remove_driver_yunlist', 'C'); refresh_lists();">Remove from Board</button>
-				</td>
-			</tr>
-                        <tr style="height:20%">
-				<td style='text-align: center'>
-                                        <center><h3>Plugin Management</h3></center>
-                                        <button class="button tiny radius" data-reveal-id="modal-create-plugin" onclick="$('#create-plugin-output').empty(); refresh_lists();">Create</button>
-					<button class="button tiny radius" data-reveal-id="modal-destroy-plugin" onclick="$('#destroy-plugin-output').empty(); refresh_cloud_plugins('destroy_pluginlist'); refresh_lists();">Remove from Cloud</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-inject-plugin" onclick="$('#inject-plugin-output').empty(); refresh_cloud_plugins('inject_pluginlist'); update_boards('inject_yunlist', 'C'); refresh_lists();">Inject</button>
-					<button class="button tiny radius" data-reveal-id="modal-startstop-plugin" onclick="$('#startstop-plugin-output').empty(); refresh_cloud_plugins('startstop_pluginlist'); update_boards('startstop_yunlist', 'C'); refresh_lists();">Start/Stop</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-call-plugin" onclick="$('#call-plugin-output').empty(); refresh_cloud_plugins('call_pluginlist'); update_boards('call_yunlist', 'C'); refresh_lists();">Call</button>
-					<button class="button tiny radius" data-reveal-id="modal-remove-plugin" onclick="$('#remove-plugin-output').empty(); update_boards('remove_plugin_yunlist', 'C'); refresh_lists();">Remove from Board</button>
-                                </td>
-                        </tr>
-                        <tr style="height:20%">
-				<td style='text-align: center'>
-                                        <center><h3>Network Management</h3></center>
-					<button class="button tiny radius" data-reveal-id="modal-show-networks" onclick="refresh_lists();">Show Networks</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-create-net" onclick="$('#create-net-output').empty(); refresh_lists();">Create Network</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-destroy-net" onclick="$('#destroy-net-output').empty(); update_nets('destroy_network_uuid'); refresh_lists();">Destroy Network</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-add-board-net" onclick="$('#add-board-net-output').empty(); update_nets('addboard_network_uuid'); update_boards('addboard_yunlist', 'C'); refresh_lists();">Add Board</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-remove-board-net" onclick="$('#remove-board-net-output').empty(); update_nets('removeboard_network_uuid'); update_boards('removeboard_yunlist', 'C'); refresh_lists();">Remove Board</button>
-                                        <button class="button tiny radius" data-reveal-id="modal-show-boards-net" onclick="$('#show_boards-output').empty(); update_nets('show_boards_uuid'); refresh_lists();">Show Boards</button>
-					<button class="button tiny radius" data-reveal-id="modal-activate-boards-net" onclick="$('#activate-board-net-output').empty(); update_boards('activate_boardnet_yunlist', 'C'); refresh_lists();">Start Network on Board</button>
-                                </td>
-                        </tr>
-                </table>
-        </td>
-</table>
-
+ <center>
+        <div style="position: relative;min-height: 400px; max-width: 90%;margin: 10px;margin-bottom: 25px;margin-top:70px;border: 3px solid #ADD8E6;border-radius: 10px;padding: 10px;box-shadow: 10px 10px 5px #888888;">
+            <div id="blockstyle">
+                <center><h2>Boards</h2></center>
+                <div>
+                <div id="count-connected"><h3>Connected ( 0 )</h3></div>
+                    <select id="yunlist_c" size="<?=$selectbox_size?>" style="width:100%; height:150px" data-yunlist-selected="yunlist_c" data-reveal-id="modal-plugins_sensors-lists"></select>
+                
+                <div id="count-disconnected"><h3>Disconnected ( 0 )</h3></div>
+                    <select id="yunlist_d" size="<?=$selectbox_size?>" style="width:100%; height:150px" data-yunlist-selected="yunlist_d" data-reveal-id="modal-plugins_sensors-lists"></select>
+                </div>
+                <button class="button tiny radius" data-reveal-id="modal-register-new-board" onclick="$('#board-registration-output').empty(); generate_uuid(); sensor_list(); refresh_lists(); refresh_map();">Register</button>
+                <button class="button tiny radius" data-reveal-id="modal-update-board" onclick="$('#board-update-output').empty(); update_boards('update_yunlist'); refresh_lists(); refresh_map();">Update</button>
+                <button class="button tiny radius" data-reveal-id="modal-unregister-board" onclick="$('#board-unregistration-output').empty(); update_boards('unregister_boardlist'); refresh_lists(); refresh_map();">Unregister</button>
+            </div>
+            <div id="blockstyle">
+                <center>
+                    <h2>Commands</h2></center>
+                <h3>Board Management</h3>
+                <button class="button tiny radius" data-reveal-id="modal-led-management" onclick="$('#led-output').empty(); update_boards('led_yunlist', 'C'); refresh_lists(); refresh_map();">LED</button>
+                <button class="button tiny radius" data-reveal-id="modal-ssh-management" onclick="$('#ssh-output').empty(); update_boards('ssh_yunlist', 'C'); refresh_lists(); refresh_map();">SSH</button>
+                <button class="button tiny radius" data-reveal-id="modal-ckan" onclick="update_boards('ckan-yunlist'); refresh_lists(); refresh_map();">CKAN</button>
+                <h3>Driver Management</h3>
+                <button class="button tiny radius" data-reveal-id="modal-create-driver" onclick="$('#create-driver-output').empty(); refresh_lists(); refresh_map();">Create</button>
+                <button class="button tiny radius" data-reveal-id="modal-destroy-driver" onclick="$('#destroy-driver-output').empty(); refresh_cloud_drivers('destroy_driverlist'); refresh_lists(); refresh_map();">Remove from Cloud</button>
+                <button class="button tiny radius" data-reveal-id="modal-inject-driver" onclick="$('#inject-driver-output').empty(); refresh_cloud_drivers('inject_driverlist'); update_boards('inject_driver_yunlist', 'C'); refresh_lists(); refresh_map();">Inject</button>
+                <button class="button tiny radius" data-reveal-id="modal-mount-driver" onclick="$('#mount-driver-output').empty(); update_boards('mount_yunlist', 'C'); $('#mount_div_remote').hide(); refresh_lists(); refresh_map();">Mount</button>
+                <button class="button tiny radius" data-reveal-id="modal-unmount-driver" onclick="$('#unmount-driver-output').empty(); update_boards('unmount_yunlist', 'C'); refresh_lists(); refresh_map();">Unmount</button>
+                <button class="button tiny radius" data-reveal-id="modal-write-driver" onclick="$('#write-driver-output').empty(); update_boards('write_driver_yunlist', 'C'); refresh_lists(); refresh_map();">Write</button>
+                <button class="button tiny radius" data-reveal-id="modal-read-driver" onclick="$('#read-driver-output').empty(); update_boards('read_driver_yunlist', 'C'); refresh_lists(); refresh_map();">Read</button>
+                <button class="button tiny radius" data-reveal-id="modal-remove-driver" onclick="$('#remove-driver-output').empty(); update_boards('remove_driver_yunlist', 'C'); refresh_lists(); refresh_map();">Remove from Board</button>
+                <h3>Plugin Management</h3>
+                <button class="button tiny radius" data-reveal-id="modal-create-plugin" onclick="$('#create-plugin-output').empty(); refresh_lists(); refresh_map();">Create</button>
+                <button class="button tiny radius" data-reveal-id="modal-destroy-plugin" onclick="$('#destroy-plugin-output').empty(); refresh_cloud_plugins('destroy_pluginlist'); refresh_lists(); refresh_map();">Remove from Cloud</button>
+                <button class="button tiny radius" data-reveal-id="modal-inject-plugin" onclick="$('#inject-plugin-output').empty(); refresh_cloud_plugins('inject_pluginlist'); update_boards('inject_yunlist', 'C'); refresh_lists(); refresh_map();">Inject</button>
+                <button class="button tiny radius" data-reveal-id="modal-startstop-plugin" onclick="$('#startstop-plugin-output').empty(); refresh_cloud_plugins('startstop_pluginlist'); update_boards('startstop_yunlist', 'C'); refresh_lists(); refresh_map();">Start/Stop</button>
+                <button class="button tiny radius" data-reveal-id="modal-call-plugin" onclick="$('#call-plugin-output').empty(); refresh_cloud_plugins('call_pluginlist'); update_boards('call_yunlist', 'C'); refresh_lists(); refresh_map();">Call</button>
+                <button class="button tiny radius" data-reveal-id="modal-remove-plugin" onclick="$('#remove-plugin-output').empty(); update_boards('remove_plugin_yunlist', 'C'); refresh_lists(); refresh_map();">Remove from Board</button>
+                <h3>Network Management</h3>
+                <button class="button tiny radius" data-reveal-id="modal-show-networks" onclick="refresh_lists(); refresh_map();">Show Networks</button>
+                <button class="button tiny radius" data-reveal-id="modal-create-net" onclick="$('#create-net-output').empty(); refresh_lists(); refresh_map();">Create Network</button>
+                <button class="button tiny radius" data-reveal-id="modal-destroy-net" onclick="$('#destroy-net-output').empty(); update_nets('destroy_network_uuid'); refresh_lists(); refresh_map();">Destroy Network</button>
+                <button class="button tiny radius" data-reveal-id="modal-add-board-net" onclick="$('#add-board-net-output').empty(); update_nets('addboard_network_uuid'); /* update_boards('addboard_yunlist', 'C');*/ refresh_lists(); refresh_map();">Add Board</button>
+                <button class="button tiny radius" data-reveal-id="modal-remove-board-net" onclick="$('#remove-board-net-output').empty(); update_nets('removeboard_network_uuid'); /*update_boards('removeboard_yunlist', 'C');*/ refresh_lists(); refresh_map();">Remove Board</button>
+                <button class="button tiny radius" data-reveal-id="modal-show-boards-net" onclick="$('#show_boards-output').empty(); update_nets('show_boards_uuid'); refresh_lists(); refresh_map();">Show Nodes</button>
+                <button class="button tiny radius" data-reveal-id="modal-activate-boards-net" onclick="$('#activate-board-net-output').empty(); update_boards('activate_boardnet_yunlist', 'C'); refresh_lists(); refresh_map();">Start Network on Board</button>
+                <h3>VFS Management</h3>
+                <button class="button tiny radius" data-reveal-id="modal-vfs-mount" onclick="$('#vfs-mount-output').empty(); update_boards('mount_vfs_in_yunlist', 'C'); /*update_boards('mount_vfs_from_yunlist', 'C');*/ refresh_lists(); refresh_map();">Mount</button>
+                <button class="button tiny radius" data-reveal-id="modal-vfs-unmount" onclick="$('#vfs-unmount-output').empty(); /*update_boards('unmount_vfs_yunlist', 'C');*/ update_boards('unmount_vfs_in_yunlist', 'C'); refresh_lists(); refresh_map();">Unmount</button>
+                <button class="button tiny radius" data-reveal-id="modal-vfs-forcemount" onclick="$('#vfs-forcemount-output').empty(); update_boards('forcemount_vfs_in_yunlist', 'C'); /*update_boards('forcemount_vfs_from_yunlist', 'C');*/ refresh_lists(); refresh_map();">Force Mount</button>
+            </div>
+        </div>
+        <div style="position: relative;min-height: 400px; max-width: 90%;margin: 10px;margin-bottom: 70px;margin-top:25px;border: 3px solid #ADD8E6;border-radius: 10px;padding: 10px;box-shadow: 10px 10px 5px #888888;" id="mapdiv">
+        </div>
+        </center>
 <!-- STOP web page layout -->
 
 
